@@ -105,6 +105,53 @@ async function run() {
       res.send(result);
     });
 
+    
+    // delete api
+
+    app.delete("/Delete-request",  async (req, res) => {
+      const id = req.query.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await requestCollection.deleteOne(query);
+      res.send(result);
+    });
+
+
+    app.get('/myRequest', async(req, res)=> {
+      const result = await requestCollection.find({}).toArray()
+      res.send(result)
+    })
+
+
+    app.get('/myRequests', async(req, res)=> {
+      const result = await requestCollection.find().limit(3).toArray()
+      res.send(result)
+    })
+
+
+
+    // donate
+    app.patch("/donate", async(req,res)=>{
+      const {status,id} =req.query;
+      const query ={_id :new ObjectId(id)}
+      const update={
+        $set :{
+          donation_status:status
+        }
+      }
+      const result = await requestCollection.updateOne(query,update)
+      res.send(result)
+    })
+
+
+
+    app.get("/donation-page",async(req,res)=>{
+      const query ={donation_status :"pending"}
+      const result =await requestCollection.find(query).toArray()
+      res.send(result)
+    })
+
+
+
     app.get("/request/:email", async (req, res) => {
       const email = req.params.email;
       const query = { requester_email: email };
