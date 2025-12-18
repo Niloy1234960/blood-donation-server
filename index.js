@@ -116,10 +116,49 @@ async function run() {
     });
 
 
+    // cencel  api 
+    app.patch("/cancel-request", async(req,res)=>{
+      const {id,status}=req.query;
+        console.log(id, status);
+      const query ={_id :new ObjectId(id)}
+    
+      const update ={
+        $set :{
+          donation_status :status
+        }
+      }
+      const result =await requestCollection.updateOne(query,update)
+      res.send(result)
+    })
+
+
+    // done api
+    app.patch("/done-request", async(req, res)=> {
+      const {id, status}= req.query
+      const query = {_id: new ObjectId(id)}
+      const update ={
+        $set :{
+          donation_status :status
+        }
+      }
+      const result = await requestCollection.updateOne(query, update)
+    })
+
+
     app.get('/myRequest', async(req, res)=> {
       const result = await requestCollection.find({}).toArray()
       res.send(result)
     })
+
+    // view request 
+    app.get("/Dashboard/view-request/:id",async(req,res)=>{
+      const {id} = req.params;
+      const query ={_id : new ObjectId(id)}
+      const result = await requestCollection.findOne(query)
+      res.send(result)
+    })
+
+    
 
 
     app.get('/myRequests', async(req, res)=> {
