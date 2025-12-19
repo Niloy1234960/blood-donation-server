@@ -85,12 +85,26 @@ async function run() {
       res.send(result);
     });
 
+    // status update api 
     app.patch("/update/user/status", verifyFbToken, async (req, res) => {
       const { email, status } = req.query;
       const query = { email: email };
       const updateStatus = {
         $set: {
           status: status,
+        },
+      };
+      const result = await usersCollection.updateOne(query, updateStatus);
+      res.send(result);
+    });
+
+    // role update api 
+    app.patch("/update/user/role", verifyFbToken, async (req, res) => {
+      const { email, role } = req.query;
+      const query = { email: email };
+      const updateStatus = {
+        $set: {
+          role: role,
         },
       };
       const result = await usersCollection.updateOne(query, updateStatus);
