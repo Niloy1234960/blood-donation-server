@@ -158,7 +158,18 @@ async function run() {
       res.send(result)
     })
 
-    
+
+    // Request edit
+    app.put("/Dashboard/update-request/:id",async(req,res)=>{
+      const {id}=req.params;
+      const formData=req.body;
+      const query ={_id : new ObjectId(id)}
+      const update ={
+        $set: formData  
+      }
+      const result =await requestCollection.updateOne(query,update);
+      res.send(result)
+    })
 
 
     app.get('/myRequests', async(req, res)=> {
