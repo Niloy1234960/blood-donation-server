@@ -159,8 +159,15 @@ async function run() {
     })
 
 
-    app.get('/myRequest', async(req, res)=> {
-      const result = await requestCollection.find({}).toArray()
+    app.get('/allRequest', async(req, res)=> {
+      const status=req.query.status;
+      console.log(status);
+            let query = {}
+      if(status){
+        query.donation_status = status
+      }
+      console.log(query);
+      const result = await requestCollection.find(query).toArray()
       res.send(result)
     })
 
