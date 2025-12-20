@@ -10,13 +10,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 const admin = require("firebase-admin");
+require("dotenv").config()
+
 
 const decoded = Buffer.from(process.env.FB_SERVICE_KEY, "base64").toString(
   "utf8"
 );
 const serviceAccount = JSON.parse(decoded);
 const uri =
-  "mongodb+srv://assignment-11:OnlBeGmiTaRL8i5u@niloy007.efzjtnv.mongodb.net/?appName=niloy007";
+  `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@niloy007.efzjtnv.mongodb.net/?appName=niloy007`;
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -52,7 +54,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     const db = client.db("pawmart");
     const usersCollection = db.collection("user");
     const requestCollection = db.collection("request");
@@ -324,7 +326,7 @@ async function run() {
     });
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
